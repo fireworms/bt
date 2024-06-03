@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // 회원별 예약조회 리스트
 {
     "rn": 1,
@@ -256,4 +257,264 @@
         "reservation_tm": "06:20~06:40",
         "status_atdc_text": "출석"
     }
+=======
+// 회원별 예약조회 리스트
+{
+    "rn": 1,
+    "class_name": "현우",
+    "membership_name": "평일 주2회",
+    "user_id": "231215002",
+    "user_name": "이승민(현우)",
+    "reservation_dt": "2024-05-31",
+    "start_tm": "16:00",
+    "end_tm": "16:20",
+    "status_atdc_text": "출석",
+    "memo": null
+}
+// 클래스 관리 리스트
+{
+    "rn": 1,
+    "class_id": "a2",
+    "class_name": "정록",
+    "class_base_minute": 20,
+    "class_base_days": null,
+    "class_base_first": "06:00:00",
+    "class_base_last": "23:00:00",
+    "status": "Y",
+    "status_text": "활성"
+}
+// 클래스 관리
+{
+    "class_id": "a2",
+    "class_name": "정록",
+    "class_base_minute": 20,
+    "class_base_days": null,
+    "class_base_first": "06:00:00",
+    "class_base_last": "23:00:00",
+    "status": "Y"
+}
+// 회원권명 관리 리스트
+{
+    "rn": 1,
+    "membership_id": "q4",
+    "membership_name": "주말 주2회",
+    "reservation_base_cnt": 8,
+    "reservation_base_deadline": 31,
+    "reservation_color": "#f6fe86",
+    "status": "Y",
+    "status_text": "활성"
+}
+// 회원권명 관리
+{
+    "membership_id": "q4",
+    "membership_name": "주말 주2회",
+    "reservation_base_cnt": 8,
+    "reservation_base_deadline": 31,
+    "reservation_color": "#f6fe86",
+    "status": "Y"
+}
+
+// 회원명 관리 리스트
+{
+    "rn": 1,
+    "user_id": "231216005",
+    "user_name": "강문(정록)",
+    "user_pwd": "1234",
+    "user_contact": "1234",
+    "user_status": "Y",
+    "user_auth": "US",
+    "user_status_text": "활성",
+    "user_memo": ""
+}
+// 회원명 관리 
+{
+    "user_id": "231216005",
+    "user_name": "강문(정록)",
+    "user_pwd": "1234",
+    "user_contact": "1234",
+    "user_auth": "US",
+    "user_memo": "",
+    "user_status": "Y"
+}
+// 클래스 회원권 매칭 리스트
+{
+    "rn": 1,
+    "class_id": "a1",
+    "class_name": "현우",
+    "membership_id": "q1",
+    "membership_name": "평일 주1회",
+    "class_membership_name": "현우 / 평일 주1회",
+    "status": "Y",
+    "status_text": "활성"
+}
+
+// 클래스 회원권 매칭 
+{
+    "class_id": "a1",
+    "membership_id": "q1",
+    "status": "Y",
+    "status_text": "활성"
+}
+// 회원 회원권 매칭 리스트
+{
+    "rn": 1,
+    "user_membership_id": 679,
+    "user_id": "231216005",
+    "user_name": "강문(정록)",
+    "membership_id": "q2",
+    "membership_name": "평일 주2회",
+    "membership_start": "2024-05-31",
+    "membership_end": "2024-06-28",
+    "membership_fee": null,
+    "membership_payment": "230000",
+    "membership_unpaid_amount": null,
+    "reservation_cnt": 8,
+    "status": "Y",
+    "status_text": "활성",
+    "memo": "5/28 계좌이체"
+}
+// 회원 회원권 매칭 
+{
+    "user_membership_id": 292,
+    "user_id": "231216005",
+    "user_name": "강문(정록)",
+    "membership_id": "q2",
+    "membership_name": "평일 주2회",
+    "membership_start": "2024-03-05",
+    "membership_end": "2024-04-05",
+    "membership_fee": "230000",
+    "membership_payment": null,
+    "membership_unpaid_amount": null,
+    "reservation_cnt": 8,
+    "status": "N",
+    "status_text": "비활성",
+    "memo": "3/5일 계좌이체"
+}
+
+
+///---------------------------------
+
+// 예약 조회 리스트
+{
+    "start": "2024-05-27T07:00",
+    "end": "2024-05-27T07:20",
+    "title": "최종현2(현우)",
+    "reservation_id": 4284,
+    "user_name": "최종현2(현우)",
+    "memo": null,
+    "class_id": "a1",
+    "class_name": "현우",
+    "user_membership_id": 502,
+    "membership_name": "평일 주2회",
+    "reservation_color": "#d4f000",
+    "reservation_dt": "2024-05-27",
+    "start_hh": "07",
+    "start_mi": "00",
+    "end_hh": "07",
+    "end_mi": "20"
+}
+// 예약 조회 ->리스트 데이터 그대로 사용
+
+// 출결 관리 리스트
+{
+    "start": "2024-05-27T07:00",
+    "end": "2024-05-27T07:20",
+    "title": "최종현2(현우)",
+    "reservation_id": 4284,
+    "user_name": "최종현2(현우)",
+    "memo": "",
+    "class_id": "a1",
+    "class_name": "현우",
+    "user_membership_id": 502,
+    "membership_name": "평일 주2회",
+    "reservation_color": "#d4f000",
+    "reservation_dt": "2024-05-27",
+    "start_hh": "07",
+    "start_mi": "00",
+    "end_hh": "07",
+    "end_mi": "20",
+    "status_atdc": "Y",
+    "status_atdc_text": "출석"
+}
+
+// 출결 관리 -> 2개 불러옴
+{
+    "user_membership_id": 573,
+    "user_name": "권민예(현우)",
+    "user_contact": "010-9507-7568",
+    "membership_name": "평일 주2회",
+    "membership_start": "2024-05-07",
+    "membership_end": "2024-07-31",
+    "membership_payment": "621,000",
+    "membership_unpaid_amount": "0",
+    "retention_cnt_rv": 24,
+    "remain_cnt_at": 17,
+    "remain_cnt_rv": 17
+},
+
+[
+    {
+        "is_current": "",
+        "user_membership_id": 573,
+        "user_name": "권민예(현우)",
+        "membership_name": "평일 주2회",
+        "reservation_dt": "2024-05-30",
+        "reservation_tm": "06:20~06:40",
+        "status_atdc_text": "출석"
+    },
+    {
+        "is_current": "V",
+        "user_membership_id": 573,
+        "user_name": "권민예(현우)",
+        "membership_name": "평일 주2회",
+        "reservation_dt": "2024-05-28",
+        "reservation_tm": "06:20~06:40",
+        "status_atdc_text": "출석"
+    },
+    {
+        "is_current": "",
+        "user_membership_id": 573,
+        "user_name": "권민예(현우)",
+        "membership_name": "평일 주2회",
+        "reservation_dt": "2024-05-21",
+        "reservation_tm": "06:20~06:40",
+        "status_atdc_text": "출석"
+    },
+    {
+        "is_current": "",
+        "user_membership_id": 573,
+        "user_name": "권민예(현우)",
+        "membership_name": "평일 주2회",
+        "reservation_dt": "2024-05-16",
+        "reservation_tm": "06:20~06:40",
+        "status_atdc_text": "출석"
+    },
+    {
+        "is_current": "",
+        "user_membership_id": 573,
+        "user_name": "권민예(현우)",
+        "membership_name": "평일 주2회",
+        "reservation_dt": "2024-05-14",
+        "reservation_tm": "06:20~06:40",
+        "status_atdc_text": "출석"
+    },
+    {
+        "is_current": "",
+        "user_membership_id": 573,
+        "user_name": "권민예(현우)",
+        "membership_name": "평일 주2회",
+        "reservation_dt": "2024-05-09",
+        "reservation_tm": "06:20~06:40",
+        "status_atdc_text": "출석"
+    },
+    {
+        "is_current": "",
+        "user_membership_id": 573,
+        "user_name": "권민예(현우)",
+        "membership_name": "평일 주2회",
+        "reservation_dt": "2024-05-07",
+        "reservation_tm": "06:20~06:40",
+        "status_atdc_text": "출석"
+    }
+>>>>>>> 5763f3aed2559d91261ac1175af60c766583717b
 ]
