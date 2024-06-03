@@ -19,6 +19,7 @@
     if (isset($res['bm_id']) && $res['bm_id'] != '') {
         $result['status'] = 'ok';
         $_SESSION['bm_id'] = $username;
+        $_SESSION['bm_name'] = $res['bm_name'];
     }
     else {
         $result['status'] = 'no';
