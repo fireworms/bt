@@ -1,14 +1,37 @@
 <?php
     include_once("{$_SERVER['DOCUMENT_ROOT']}/lib/config/conf.common.php");
-    if (!isset($_SESSION['bm_id']) || $_SESSION['bm_id'] == '') {
+    if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == '') {
         echo '<script> location.href = "./login.php" </script>';
         exit;
     }
     
-    $login_message = "<li><p class=\"navbar-text navbar-right\">{$_SESSION['bm_name']}님 로그인하셨습니다.</p></li>";
+    $login_message = "<li><p class=\"navbar-text navbar-right\">{$_SESSION['user_name']}님 로그인하셨습니다.</p></li>";
     $login_button = "<a href=\"#\" onclick=\"logout();\">로그아웃</a>";
-    
-    
+
+    $classOptionData = get_class_list();
+    $classOption = '';
+    foreach($classOptionData['data'] as $val) {
+        $classOption .= '
+            <option value="'.$val['class_id'].'" data-mn="'.$val['class_base_first'].'" data-mx="'.$val['class_base_last'].'" data-bm="'.$val['class_base_minute'].'" data-bd="'.$val['class_base_days'].'">'.$val['class_name'].'</option>
+        ';
+    }
+
+    $userOptionData = get_user_list();
+    $userOption = '';
+    foreach($userOptionData['data'] as $val) {
+        $userOption .= '
+            <option value="'.$val['user_id'].'">【'.$val['user_id'].'】 '.$val['user_name'].'</option>
+        ';
+    }
+
+    $membershipOptionData = get_membership_list();
+    $membershipOption = '';
+    foreach($membershipOptionData['data'] as $val) {
+        $membershipOption .= '
+            <option value="'.$val['membership_id'].'" data-reservation_base_cnt="'.$val['reservation_base_cnt'].'" data-reservation_base_deadline="'.$val['reservation_base_deadline'].'">'.$val['membership_name'].'</option>
+        ';
+    }
+
 
 ?>
 <!DOCTYPE html>
@@ -39,8 +62,6 @@
     <script src="/vendor/js/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/jamerl.js"></script>
     <script src="/js/scripts.js"></script>
-    <!-- <link href="/vendor/css/sb-admin-2.css" rel="stylesheet"> -->
-    <!-- <script src="/vendor/js/sb-admin-2.min.js"></script> -->
     <link rel="stylesheet" href="/vendor/bootstrap-select-1.13.14/dist/css/bootstrap-select.css">
     <script src="/vendor/bootstrap-select-1.13.14/dist/js/bootstrap-select.js"></script>
     <script src="/vendor/bootstrap-select-1.13.14/dist/js/i18n/defaults-ko_KR.js"></script>
@@ -168,8 +189,8 @@
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">예약 관리<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="/attendanceManagement.php">출결 관리</a>
-                                            <a href="/memberReservation.php">회원별 예약 조회</a>
+                                            <a href="/manageAttendance.php">출결 관리</a>
+                                            <a href="/viewReservation.php">회원별 예약 조회</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -183,8 +204,8 @@
                                         </li>
                                         <li role="separator" class="divider"></li>
                                         <li>
-                                            <a href="/matchCM.php">클래스/회원권 매핑</a>
-                                            <a href="/matchMM.php">회원/회원권 매핑</a>
+                                            <a href="/manageMatchCM.php">클래스/회원권 매핑</a>
+                                            <a href="/manageMatchMM.php">회원/회원권 매핑</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -268,3 +289,74 @@
                     </div>
                     <!-- /.container-fluid -->
                 </nav>
+                <script>
+                    function info_event(){
+                        $.ajax({
+                            type : "post",
+                            url : "/user_proc.php",
+                            async : false,
+                            data : {
+                                user_id : "<?php echo $_SESSION['user_id']; ?>",
+                                flag: 'select',
+                            },
+                            error : function(error) {
+                                isSE(error);
+                            },
+                            success : function(datas) {
+                                var d = JSON.parse(datas).data[0];
+                                $('#info_modal_user_id').val(d.user_id);
+                                $('#info_modal_user_name').val(d.user_name);
+                                
+                                $('#info_modal_user_contact').val(d.user_contact);
+                                $('#info_modal_user_status').val(d.user_status);
+                                $('#info_modal_user_memo').val(d.user_memo);
+
+                                $('#infoModal').modal('show');
+                                
+                                $('#info-update-event').unbind();
+                                $('#info-update-event').on('click', function() {
+                                    if ($("#info_modal_user_pwd").val().trim() === "") {
+                                        alert("비밀번호를 입력하세요.");
+                                        return false;
+                                    }
+                                    if ($("#info_modal_user_pwd_old").val().trim() === "") {
+                                        alert("기존 비밀번호를 입력하세요.");
+                                        return false;
+                                    }
+                                    if ($("#info_modal_user_contact").val().trim().length < 4) {
+                                        alert("연락처(최소4자리)를 입력하세요.");
+                                        return false;
+                                    }
+                                    // 새로운 일정 저장
+                                    $.ajax({
+                                        type : "post",
+                                        url : "/user_proc.php",
+                                        async : false,
+                                        data : {
+                                            user_id : $('#info_modal_user_id').val(),
+                                            user_pwd : $('#info_modal_user_pwd').val(),
+                                            user_pwd_old : $('#info_modal_user_pwd_old').val(),
+                                            user_contact : $('#info_modal_user_contact').val(),
+                                            flag: 'update2',
+                                        },
+                                        error : function(error) {
+                                            isSE(error);
+                                        },
+                                        success : function(datas) {
+                                            var d = JSON.parse(datas);
+                                            if(d.status == 'error'){
+                                                alert("변경할 수 없습니다.");
+                                            }else{
+                                                $('#infoModal').modal('hide');
+                                            }
+                                        },
+                                        complete : function() {
+                                        }
+                                    });
+                                });
+                            },
+                            complete : function() { }
+                        });
+                    }
+
+                </script>

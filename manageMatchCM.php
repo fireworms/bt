@@ -1,21 +1,32 @@
 <?php
     include_once("{$_SERVER['DOCUMENT_ROOT']}/inc/header.php");
 ?>
-                
-				<!-- End of Topbar -->
-				<div class="container">
-					<!-- 					<h1 class="h3">예약</h1> -->
+                <div class="container">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">회원권 관리</h3>
+							<h3 class="panel-title">클래스/회원권 매핑</h3>
 						</div>
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-xs-4">
-									<div class="form-control form-label" >회원권명</div>
+									<div class="form-control form-label" >클래스</div>
 								</div>
 								<div class="col-xs-8">
-									<input type="text" class="form-control" id="p_membership_name" placeholder="Enter키 조회">
+									<select class="form-control" id="p_class_id">
+										<option value="">= 선택 =</option>
+                                        <?php echo $classOption;?>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-4">
+									<div class="form-control form-label" >회원권</div>
+								</div>
+								<div class="col-xs-8">
+									<select class="form-control" id="p_membership_id">
+										<option value="">= 선택 =</option>
+                                        <?php echo $membershipOption;?>
+									</select>
 								</div>
 							</div>
 							<div class="row">
@@ -23,7 +34,7 @@
 									<div class="form-control form-label" >상태</div>
 								</div>
 								<div class="col-xs-8">
-									<select class="form-control" id="p_status">
+									<select class="form-control" id="p_user_status">
 										<option value="">= 선택 =</option>
 										<option value="Y" selected>활성</option>
 										<option value="N">비활성</option>
@@ -39,11 +50,11 @@
 							<thead>
 								<tr>
 									<th data-orderable="false">rn</th>
+									<th>class_id</th>
+									<!-- <th>class_name</th> -->
 									<th>membership_id</th>
-									<th>membership_name</th>
-									<th>reservation_base_cnt</th>
-									<th>reservation_base_deadline</th>
-									<th>reservation_color</th>
+									<!-- <th>membership_name</th> -->
+									<th>class_membership_name</th>
 									<th>status</th>
 									<th>status_text</th>
 								</tr>
@@ -61,44 +72,28 @@
 									<h4 class="modal-title"></h4>
 								</div>
 								<div class="modal-body">
+									<input type="hidden" class="form-control" id="modal_h_class_id">
+									<input type="hidden" class="form-control" id="modal_h_membership_id">
 									<div class="row">
 										<div class="col-xs-4">
-											<div class="form-control form-label">회원권 아이디</div>
+											<div class="form-control form-label">클래스</div>
 										</div>
 										<div class="col-xs-8">
-											<input type="text" class="form-control" id="modal_membership_id" placeholder="회원권 아이디를 입력하세요">
+											<select class="form-control" id="modal_class_id">
+												<option value="">= 선택 =</option>
+                                                <?php echo $classOption; ?>
+											</select>
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-xs-4">
-											<div class="form-control form-label">회원권명</div>
+											<div class="form-control form-label">회원권</div>
 										</div>
 										<div class="col-xs-8">
-											<input type="text" class="form-control" id="modal_membership_name" placeholder="회원권명을 입력하세요">
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-4">
-											<div class="form-control form-label">등록횟수 기준</div>
-										</div>
-										<div class="col-xs-8">
-											<input type="number" class="form-control" id="modal_reservation_base_cnt" placeholder="등록횟수 기준을 입력하세요">
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-4">
-											<div class="form-control form-label">사용기한 기준</div>
-										</div>
-										<div class="col-xs-8">
-											<input type="number" class="form-control" id="modal_reservation_base_deadline" placeholder="사용기한 기준을 입력하세요">
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xs-4">
-											<div class="form-control form-label">배경색</div>
-										</div>
-										<div class="col-xs-8">
-											<input type="color" class="form-control" id="modal_reservation_color" style="padding: 2px 4px;">
+											<select class="form-control" id="modal_membership_id">
+												<option value="">= 선택 =</option>
+                                                <?php echo $membershipOption; ?>
+											</select>
 										</div>
 									</div>
 									<div class="row">
@@ -106,23 +101,16 @@
 											<div class="form-control form-label">상태</div>
 										</div>
 										<div class="col-xs-8">
-											<select class="form-control" id="modal_status">
-												<option value="Y">활성화</option>
-												<option value="N">비활성화</option>
-											</select>
+											<input type="text" class="form-control" id="modal_status_text" readonly="readonly">
 										</div>
 									</div>
 									<hr>
 									<div class="row">
 										<div class="col-xs-12" style="color: gray;">
 											<ul>
-												<li>등록횟수 기준 : 예약 가능한 횟수를 의미</li>
-												<li>사용기한 기준 : 회원권 만료일 계산에 사용되는 일자 수</li>
-												<li>배경색 : 예약한 시간표의 배경색을 의미
-													<br>인터넷 익스플로러에서는 Color Picker 작동 미지원
-													<br>아래링크를 이용하여 색상 코드를 골라서 직접 입력
-													<br><a href="javascript: getRGB();">RGB 선택하러 가기</a>
-												</li>
+												<li>클래스 : 사용 가능한 회원권을 매핑할 대상 클래스를 의미</li>
+												<li>회원권 : 매핑할 회원권을 의미</li>
+												<li>회원/회원권 화면에서 매핑된 회원권으로 예약 가능한 클래스의 범위를 설정</li>
 											</ul>
 										</div>
 									</div>
@@ -133,6 +121,8 @@
 								</div>
 								<div class="modal-footer modalBtnContainer-modifyEvent">
 									<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+									<button type="button" class="btn btn-danger" id="status-n-event">비활성화</button>
+									<button type="button" class="btn btn-success" id="status-y-event">활성화</button>
 									<button type="button" class="btn btn-primary" id="update-event">저장</button>
 								</div>
 								<!-- /.modal-content -->
@@ -142,24 +132,20 @@
 						<!-- /.modal -->
 					</div>
 				</div>
-				<!-- /.container -->
-			</div>
-		</div>
-		<!-- End of Content Wrapper -->
-	</div>
-	<!-- End of Page Wrapper -->
-	<script type="text/javascript">
+
+    <script type="text/javascript">
 		var table;
 		var $ = jQuery.noConflict();
 		$(document).ready(function() {
 			table = $('#myTable').DataTable({
 				ajax : {
-					url : '/membership_proc.php',
+					url : '/CM_proc.php',
 					type : 'POST',
 					async: false,
 					data: function(param){
-						param.membership_name = $("#p_membership_name").val();
-						param.status = $("#p_status").val();
+						param.class_id = $("#p_class_id").val();
+						param.membership_id = $("#p_membership_id").val();
+						param.status = $("#p_user_status").val();
                         param.flag = 'select';
 					},
 					dataSrc : function(json) {
@@ -170,39 +156,26 @@
 				processing : true,
 				responsive : true,
 				ordering : false,
-				//		order : [ [ 0, 'asc' ] ],
 				columns : [ {
 					data : "rn",
 					title : "#",
 					width : 10
 				}, {
+					data : "class_id",
+					title : "클래스 아이디",
+					width : 100,
+					visible : false
+				},  {
 					data : "membership_id",
 					title : "회원권 아이디",
-					width : 100
+					width : 100,
+					visible : false
 				}, {
-					data : "membership_name",
-					title : "회원권명",
+					data : "class_membership_name",
+					title : "클래스/회원권",
 					render : function(data, type, row) {
 						if (type == 'display') {
 							data = '<a href="#" class="edit-event" onclick="javascript: edit_event(this);">' + data + '</a>';
-						}
-						return data;
-					}
-				}, {
-					data : "reservation_base_cnt",
-					title : "등록횟수",
-					width : 100
-				}, {
-					data : "reservation_base_deadline",
-					title : "사용기한",
-					width : 100
-				}, {
-					data : "reservation_color",
-					title : "배경색",
-					width : 100,
-					render : function(data, type, row) {
-						if (type == 'display') {
-							data = '<span style="padding:0 15px;background-color: ' + data + '">' + '' + '</span>';
 						}
 						return data;
 					}
@@ -240,16 +213,15 @@
 					className : 'btn btn-sm btn-primary',
 					action : function(e, dt, node, config) {
 
-						$('.modal-title').text("회원권 등록");
-						$('#modal_membership_id').prop("readonly", false);
+						$('.modal-title').text("클래스/회원권 매핑 등록");
+						$('#modal_class_id option').prop("disabled", false);
 
+						$('#modal_h_class_id').val("");
+						$('#modal_h_membership_id').val("");
+						
+						$('#modal_class_id').val("");
 						$('#modal_membership_id').val("");
-						$('#modal_membership_name').val("");
-						$('#modal_reservation_base_cnt').val("");
-						$('#modal_reservation_base_deadline').val("");
-						$('#modal_reservation_color').val("#FFFFFF");
-						$('#modal_status option:eq(0)').prop("selected", true);
-
+						$('#modal_status_text').val("");
 
 						$('.modalBtnContainer-addEvent').show();
 						$('.modalBtnContainer-modifyEvent').hide();
@@ -257,35 +229,22 @@
 
 						$('#save-event').unbind();
 						$('#save-event').on('click', function() {
+							if ($("#modal_class_id").val().trim() === "") {
+								alert("클래스를 선택하세요.");
+								return false;
+							}
 							if ($("#modal_membership_id").val().trim() === "") {
-								alert("회원권 아이디를 입력하세요.");
+								alert("회원권을 선택하세요.");
 								return false;
 							}
-							if ($("#modal_membership_name").val().trim() === "") {
-								alert("회원권명을 입력하세요.");
-								return false;
-							}
-							if ($("#modal_reservation_base_cnt").val().trim() === "") {
-								alert("등록횟수 기준을 입력하세요.");
-								return false;
-							}
-							if ($("#modal_reservation_base_deadline").val().trim() === "") {
-								alert("사용기한 기준을 입력하세요.");
-								return false;
-							}
-							
-							// 새로운 멤버쉽 등록
+							// 새로운 매핑 저장
 							$.ajax({
 								type : "post",
-								url : "/membership_proc.php",
+								url : "CM_proc.php",
 								async : false,
 								data : {
+									class_id : $('#modal_class_id').val(),
 									membership_id : $('#modal_membership_id').val(),
-									membership_name : $('#modal_membership_name').val(),
-									reservation_base_cnt : $('#modal_reservation_base_cnt').val(),
-									reservation_base_deadline : $('#modal_reservation_base_deadline').val(),
-									reservation_color : $('#modal_reservation_color').val(),
-									status : $('#modal_status').val(),
                                     flag: 'insert',
 								},
 								error : function(error) {
@@ -304,7 +263,6 @@
 								}
 							});
 						});
-						// 					table.ajax.reload();
 					}
 				}, {
 					text : '조회',
@@ -315,26 +273,21 @@
 				} ]
 				
 			});
-
-			$("#p_membership_name").on("keyup", function(e){
-				if(e.which === 13){
-					table.ajax.reload();
-				}
-			});
 		});
 		function edit_event(obj){
 			console.log(table.row($(obj).parents("tr:first")).data());
 			editEvent(table.row($(obj).parents("tr:first")).data());
 		}
 		var editEvent = function(d) {
-			$('.modal-title').text("회원권 변경");
-			$('#modal_membership_id').prop("readonly", true);
+			$('.modal-title').text("클래스/회원권 매핑 변경");
+			$('#modal_class_id option').prop("disabled", true);
 
 			$.ajax({
 				type : "post",
-				url : "/membership_proc.php",
+				url : "CM_proc.php",
 				async : false,
 				data : {
+					class_id : d.class_id,
 					membership_id : d.membership_id,
                     flag: 'select',
 				},
@@ -343,44 +296,31 @@
 				},
 				success : function(datas) {
 					var d = JSON.parse(datas).data[0];
+
+					$('#modal_h_class_id').val(d.class_id);
+					$('#modal_h_membership_id').val(d.membership_id);
+					
+					$('#modal_class_id option[value=' + d.class_id + ']').prop("disabled", false).prop("selected", true);
 					$('#modal_membership_id').val(d.membership_id);
-					$('#modal_membership_name').val(d.membership_name);
-					$('#modal_reservation_base_cnt').val(d.reservation_base_cnt);
-					$('#modal_reservation_base_deadline').val(d.reservation_base_deadline);
-					$('#modal_reservation_color').val(d.reservation_color);
-					$('#modal_status').val(d.status);
+					$('#modal_status_text').val(d.status_text);
 
 					$('.modalBtnContainer-addEvent').hide();
 					$('.modalBtnContainer-modifyEvent').show();
 					$('#eventModal').modal('show');
 					
 					$('#update-event').unbind();
-					$('#update-event').on('click', function() {
-						if ($("#modal_membership_name").val().trim() === "") {
-							alert("회원권명을 입력하세요.");
-							return false;
-						}
-						if ($("#modal_reservation_base_cnt").val().trim() === "") {
-							alert("등록횟수를 입력하세요.");
-							return false;
-						}
-						if ($("#modal_reservation_base_deadline").val().trim() === "") {
-							alert("사용기한을 입력하세요.");
-							return false;
-						}
-						
-						// 새로운 일정 저장
-						$.ajax({
+
+                    const update_cm = (status = '') => { // Todo: 프라임키 하나 두고 수정하는걸로 고쳐보든가 아니면
+                        $.ajax({
 							type : "post",
-							url : "/membership_proc.php",
+							url : "CM_proc.php",
 							async : false,
 							data : {
+								prev_class_id : $('#modal_h_class_id').val(),
+								prev_membership_id : $('#modal_h_membership_id').val(),
+                                class_id : $('#modal_class_id').val(),
 								membership_id : $('#modal_membership_id').val(),
-								membership_name : $('#modal_membership_name').val(),
-								reservation_base_cnt : $('#modal_reservation_base_cnt').val(),
-								reservation_base_deadline : $('#modal_reservation_base_deadline').val(),
-								reservation_color : $('#modal_reservation_color').val(),
-								status : $('#modal_status').val(),
+                                status: status,
                                 flag: 'update',
 							},
 							error : function(error) {
@@ -388,7 +328,7 @@
 							},
 							success : function(datas) {
 								var d = JSON.parse(datas);
-								if(d.rt_code < 0){
+								if (d.status == 'error') {
 									alert("변경할 수 없습니다.");
 								}else{
 									table.ajax.reload();
@@ -398,17 +338,34 @@
 								$('#eventModal').modal('hide');
 							}
 						});
+                    };
+
+					$('#update-event').on('click', function() {
+						if ($("#modal_class_id").val().trim() === "") {
+							alert("클래스를 선택하세요.");
+							return false;
+						}
+						if ($("#modal_membership_id").val().trim() === "") {
+							alert("회원권을 입력하세요.");
+							return false;
+						}
+						update_cm();
+					});
+					
+					$('#status-y-event').unbind();
+					$('#status-y-event').on('click', function() {
+						update_cm('Y');
+					});
+					
+					$('#status-n-event').unbind();
+					$('#status-n-event').on('click', function() {
+						update_cm('N');
 					});
 				},
 				complete : function() { }
 			});
 		};
-		
-		function getRGB(){
-			window.open("https://www.w3schools.com/colors/colors_picker.asp", "_blank");
-		}
 	</script>
-
 
 
 <?php

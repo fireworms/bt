@@ -6,20 +6,20 @@
 
     $sql = "SELECT  *
             FROM    bt_member
-            WHERE   bm_id = :bm_id
-            AND     bm_password = SHA(:bm_password)
+            WHERE   user_id = :user_id
+            AND     user_pwd = SHA(:user_pwd)
     ";
     $db->prepare($sql);
     $db->bind_array([
-        ':bm_id' => $username,
-        ':bm_password' => $password,
+        ':user_id' => $username,
+        ':user_pwd' => $password,
     ]);
     $res = $db->single();
     $result = [];
-    if (isset($res['bm_id']) && $res['bm_id'] != '') {
+    if (isset($res['user_id']) && $res['user_id'] != '') {
         $result['status'] = 'ok';
-        $_SESSION['bm_id'] = $username;
-        $_SESSION['bm_name'] = $res['bm_name'];
+        $_SESSION['user_id'] = $username;
+        $_SESSION['user_name'] = $res['user_name'];
     }
     else {
         $result['status'] = 'no';

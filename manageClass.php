@@ -165,13 +165,12 @@
 		$(document).ready(function() {
 			table = $('#myTable').DataTable({
 				ajax : {
-// 					'url' : '/MOCK_DATA.json',
-// 					'dataSrc' : ''
-					url : '/cs/select.php',
+					url : '/class_proc.php',
 					type : 'POST',
 					async: false,
 					data: function(param){
 						param.status = $("#p_status").val();
+                        param.flag = 'select';
 					},
 					dataSrc : function(json) {
 						console.log(json);
@@ -180,9 +179,7 @@
 				},
 				processing : true,
 				responsive : true,
-				//		orderMulti : true,
 				ordering : false,
-				//		order : [ [ 0, 'asc' ] ],
 				columns : [ {
 					data : "rn",
 					title : "#",
@@ -318,10 +315,10 @@
 							str_class_base_days += $("#modal_class_base_days_6").is(":checked") ? "6;" : "";
 							str_class_base_days += $("#modal_class_base_days_0").is(":checked") ? "0;" : "";
 							
-							// 새로운 일정 저장
+							// 새로운 클래스 등록
 							$.ajax({
 								type : "post",
-								url : "/cs/insert",
+								url : "/class_proc.php",
 								async : false,
 								data : {
 									class_id : $('#modal_class_id').val(),
@@ -330,14 +327,15 @@
 									class_base_days : str_class_base_days,
 									class_base_first : $('#modal_class_base_first').val().substring(0, 5).concat(":00"),
 									class_base_last : $('#modal_class_base_last').val().substring(0, 5).concat(":00"),
-									status : $('#modal_status').val()
+									status : $('#modal_status').val(),
+                                    flag: 'insert',
 								},
 								error : function(error) {
 									isSE(error);
 								},
 								success : function(datas) {
 									var d = JSON.parse(datas);
-									if (d.rt_code < 0) {
+									if (d.status == 'error') {
 										alert("등록할 수 없습니다.");
 									} else {
 										table.ajax.reload();
@@ -348,7 +346,6 @@
 								}
 							});
 						});
-						// 					table.ajax.reload();
 					}
 				}, {
 					text : '조회',
@@ -359,24 +356,6 @@
 				} ]
 				
 			});
-
-			// 	table.buttons().container().appendTo(
-			// 		$('.panel-body', table.table().container())
-			// 	);
-			//	table.on('xhr', function() {
-			//		var json = table.ajax.json();
-			//		alert(json.data.length + ' row(s) were loaded');
-			//	});
-			/* Column별 검색기능 추가 */
-// 			$('#myTable_filter').prepend('<select id="select"></select>');
-// 			$('#myTable > thead > tr').children().each(function(indexInArray, valueOfElement) {
-// 				$('#select').append('<option>' + valueOfElement.innerHTML + '</option>');
-// 			});
-
-// 			$('.dataTables_filter input').unbind().bind('keyup', function() {
-// 				var colIndex = document.querySelector('#select').selectedIndex;
-// 				table.column(colIndex).search(this.value).draw();
-// 			});
 		});
 		function edit_event(obj){
 			console.log(table.row($(obj).parents("tr:first")).data());
@@ -389,16 +368,17 @@
 
 			$.ajax({
 				type : "post",
-				url : "/cs/select_detail",
+				url : "/class_proc.php",
 				async : false,
 				data : {
-					class_id : d.class_id
+					class_id: d.class_id,
+                    flag: 'select',
 				},
 				error : function(error) {
 					isSE(error);
 				},
 				success : function(datas) {
-					var d = JSON.parse(datas);
+					var d = JSON.parse(datas).data[0];
 					$('#modal_class_id').val(d.class_id);
 					$('#modal_class_name').val(d.class_name);
 					$('#modal_class_base_minute').val(d.class_base_minute);
@@ -445,10 +425,10 @@
 						str_class_base_days += $("#modal_class_base_days_5").is(":checked") ? "5;" : "";
 						str_class_base_days += $("#modal_class_base_days_6").is(":checked") ? "6;" : "";
 						str_class_base_days += $("#modal_class_base_days_0").is(":checked") ? "0;" : "";
-						// 새로운 일정 저장
+						// 클래스 정보 변경
 						$.ajax({
 							type : "post",
-							url : "/cs/update",
+							url : "/class_proc.php",
 							async : false,
 							data : {
 								class_id : $('#modal_class_id').val(),
@@ -457,14 +437,15 @@
 								class_base_days : str_class_base_days,
 								class_base_first : $('#modal_class_base_first').val().substring(0, 5).concat(":00"),
 								class_base_last : $('#modal_class_base_last').val().substring(0, 5).concat(":00"),
-								status : $('#modal_status').val()
+								status : $('#modal_status').val(),
+                                flag: 'update',
 							},
 							error : function(error) {
 								isSE(error);
 							},
 							success : function(datas) {
 								var d = JSON.parse(datas);
-								if(d.rt_code < 0){
+								if (d.status == 'error') {
 									alert("변경할 수 없습니다.");
 								}else{
 									table.ajax.reload();
