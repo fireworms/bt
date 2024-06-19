@@ -795,7 +795,9 @@
 				var rows = JSON.parse(datas).data;
 				$("#reg_modal_user_membership_id option:not(:eq(0))").remove();
 				$.each(rows, function(i, row){
-					$("#reg_modal_user_membership_id").append("<option value='" + row.user_membership_id + "'>" + row.membership_name + "</option>");
+                    if (row.remain_cnt > 0) {
+                        $("#reg_modal_user_membership_id").append(`<option value="${row.user_membership_id}">${row.membership_name} (잔여횟수 : ${row.remain_cnt})</option>`);
+                    }
 				});
 			}
 		});

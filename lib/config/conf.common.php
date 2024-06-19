@@ -4,6 +4,17 @@
         session_start();
     }
 
+
+    ////////////////////// array
+
+    $arrPaymentMethod = [
+        1 => "현금",
+        2 => "카드",
+        3 => "기타",
+    ];
+
+    ////////////////////// function 
+
     function get_user_id () {
         global $db;
         // 오늘 날짜를 가져옵니다.
@@ -45,8 +56,15 @@
         $db->prepare($sql);
         $db->bind_array($total_params);
         $res = $db->resultset();
+        $result = [];
+
+        foreach ($res as $row) {
+            $row['remain_cnt'] = get_reservation_cnt_remain($row['user_membership_id']);
+            $result[] = $row;
+            
+        }
         $response = [
-            "data" => $res,
+            "data" => $result,
         ];
 
         return $response;
@@ -99,4 +117,32 @@
         ];
 
         return $response;
+    }
+
+    function get_reservation_cnt_remain ($user_membership_id) {
+        global $db;
+        
+        $sql = "SELECT  mm.reservation_cnt
+                FROM    bt_match_mm mm
+                WHERE   mm.user_membership_id = :user_membership_id
+                
+        ";
+        $db->prepare($sql);
+        $db->bind(':user_membership_id', $user_membership_id);
+        $res = $db->single();
+
+        $reservationCnt = $res['reservation_cnt'];
+
+        $sql = "SELECT  count(*) as cnt
+                FROM    bt_reservation br
+                WHERE   br.user_membership_id = :user_membership_id
+                
+        ";
+        $db->prepare($sql);
+        $db->bind(':user_membership_id', $user_membership_id);
+        $res = $db->single();
+
+        $spentCnt = $res['cnt'];
+
+        return $reservationCnt - $spentCnt;
     }

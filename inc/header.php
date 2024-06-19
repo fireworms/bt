@@ -32,6 +32,13 @@
         ';
     }
 
+    $paymentMethodOption = '';
+    foreach($arrPaymentMethod as $key => $val) {
+        $paymentMethodOption .= '
+            <option value="'.$key.'" >'.$val.'</option>
+        ';
+    }
+
 
 ?>
 <!DOCTYPE html>
@@ -181,16 +188,16 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
-                                <li>
+                                <!-- <li>
                                     <a href="/reservationView.php">예약<span class="sr-only">(current)</span></a>
-                                </li>
+                                </li> -->
                                 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">예약 관리<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a href="/manageAttendance.php">출결 관리</a>
-                                            <a href="/viewReservation.php">회원별 예약 조회</a>
+                                            <!-- <a href="/viewReservation.php">회원별 예약 조회</a> -->
                                         </li>
                                     </ul>
                                 </li>

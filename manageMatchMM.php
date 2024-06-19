@@ -66,9 +66,10 @@
 									<th>membership_name</th>
 									<th>membership_start</th>
 									<th>membership_end</th>
-									<th>membership_fee</th>
+									<!-- <th>membership_fee</th> -->
+                                    <th>membership_payment_method</th>
 									<th>membership_payment</th>
-									<th>membership_unpaid_amount</th>
+									<!-- <th>membership_unpaid_amount</th> -->
 									<th>reservation_cnt</th>
 									<th>memo</th>
 									<th>status</th>
@@ -145,14 +146,25 @@
 										</div>
 									</div>
 									<hr>
-									<div class="row">
+                                    <div class="row">
+										<div class="col-xs-4">
+											<div class="form-control form-label">결제수단</div>
+										</div>
+										<div class="col-xs-8">
+											<select class="form-control selectpicker" id="modal_membership_payment_method">
+                                                <option value="">= 선택 =</option>
+                                                <?php echo $paymentMethodOption; ?>
+											</select>
+										</div>
+									</div>
+									<!-- <div class="row">
 										<div class="col-xs-4">
 											<div class="form-control form-label">비용</div>
 										</div>
 										<div class="col-xs-8">
 											<input type="number" class="form-control" id="modal_membership_fee" placeholder="비용을 입력하세요">
 										</div>
-									</div>
+									</div> -->
 									<div class="row">
 										<div class="col-xs-4">
 											<div class="form-control form-label">결제금</div>
@@ -161,14 +173,14 @@
 											<input type="number" class="form-control" id="modal_membership_payment" placeholder="결제금을 입력하세요">
 										</div>
 									</div>
-									<div class="row">
+									<!-- <div class="row">
 										<div class="col-xs-4">
 											<div class="form-control form-label">미수금</div>
 										</div>
 										<div class="col-xs-8">
 											<input type="number" class="form-control" id="modal_membership_unpaid_amount" placeholder="미수금을 입력하세요">
 										</div>
-									</div>
+									</div> -->
 									<div class="row">
 										<div class="col-xs-4">
 											<div class="form-control form-label">메모</div>
@@ -217,7 +229,7 @@
 		$(document).ready(function() {
 			table = $('#myTable').DataTable({
 				ajax : {
-					url : 'MM_proc.php',
+					url : 'manageMatchMM_proc.php',
 					type : 'POST',
 					async: false,
 					data: function(param){
@@ -283,25 +295,47 @@
 					title : "종료일",
 					width : 80,
 					className: 'dt-head-center dt-body-center'
-				}, {
-					data : "membership_fee",
-					title : "비용",
-					width : 80,
-					className: 'dt-head-center dt-body-right',
-					render: $.fn.dataTable.render.number( ',', '.', 0, '' )
-				}, {
+				}, 
+                // {
+				// 	data : "membership_fee",
+				// 	title : "비용",
+				// 	width : 80,
+				// 	className: 'dt-head-center dt-body-right',
+				// 	render: $.fn.dataTable.render.number( ',', '.', 0, '' )
+				// },
+                {
+                    data : "membership_payment_method",
+                    title : "결제수단",
+                    width : 80,
+                    className: 'dt-head-center dt-body-right',
+                    render: function ( data, type, row ) {
+                        switch(data) {
+                            case '1':
+                                return '현금';
+                            case '2':
+                                return '카드';
+                            case '3':
+                                return '기타';
+                            default:
+                                return data;
+                        }
+                    }
+                },
+                {
 					data : "membership_payment",
 					title : "결제금",
 					width : 80,
 					className: 'dt-head-center dt-body-right',
 					render: $.fn.dataTable.render.number( ',', '.', 0, '' )
-				}, {
-					data : "membership_unpaid_amount",
-					title : "미수금",
-					width : 80,
-					className: 'dt-head-center dt-body-right',
-					render: $.fn.dataTable.render.number( ',', '.', 0, '' )
-				}, {
+				},
+                // {
+				// 	data : "membership_unpaid_amount",
+				// 	title : "미수금",
+				// 	width : 80,
+				// 	className: 'dt-head-center dt-body-right',
+				// 	render: $.fn.dataTable.render.number( ',', '.', 0, '' )
+				// }, 
+                {
 					data : "memo",
 					title : "메모",
 					className: 'dt-head-center'
@@ -359,6 +393,7 @@
 						$('#modal_membership_start').val("");
 						$('#modal_membership_end').val("");
 						$('#modal_membership_fee').val("");
+                        $('#modal_membership_payment_method').val("").change();
 						$('#modal_membership_payment').val("");
 						$('#modal_membership_unpaid_amount').val("");
 						$('#modal_status_text').val("");
@@ -382,10 +417,10 @@
 								alert("예약횟수를 입력하세요.");
 								return false;
 							}
-							// 새로운 일정 저장
+							// 새 회원/회원권 매치 등록
 							$.ajax({
 								type : "post",
-								url : 'MM_proc.php',
+								url : 'manageMatchMM_proc.php',
 								async : false,
 								data : {
 									user_membership_id : $('#modal_h_user_membership_id').val(),
@@ -393,9 +428,10 @@
 									membership_id : $('#modal_membership_id').val(),
 									membership_start : $('#modal_membership_start').val(),
 									membership_end : $('#modal_membership_end').val(),
-									membership_fee : $('#modal_membership_fee').val(),
+									// membership_fee : $('#modal_membership_fee').val(),
+                                    membership_payment_method : $('#modal_membership_payment_method').val(),
 									membership_payment : $('#modal_membership_payment').val(),
-									membership_unpaid_amount : $('#modal_membership_unpaid_amount').val(),
+									// membership_unpaid_amount : $('#modal_membership_unpaid_amount').val(),
 									reservation_cnt : $('#modal_reservation_cnt').val(),
 									memo : $('#modal_memo').val(),
                                     flag: 'insert'
@@ -450,7 +486,7 @@
 
 			$.ajax({
 				type : "post",
-				url : "MM_proc.php",
+				url : "manageMatchMM_proc.php",
 				async : false,
 				data : {
 					user_membership_id : d.user_membership_id,
@@ -469,9 +505,10 @@
 					$('#modal_reservation_cnt').val(d.reservation_cnt);
 					$('#modal_membership_start').val(d.membership_start);
 					$('#modal_membership_end').val(d.membership_end);
-					$('#modal_membership_fee').val(d.membership_fee);
+					// $('#modal_membership_fee').val(d.membership_fee);
+                    $('#modal_membership_payment_method').val(d.membership_payment_method).change();
 					$('#modal_membership_payment').val(d.membership_payment);
-					$('#modal_membership_unpaid_amount').val(d.membership_unpaid_amount);
+					// $('#modal_membership_unpaid_amount').val(d.membership_unpaid_amount);
 					$('#modal_status_text').val(d.status_text);
 					$('#modal_memo').val(d.memo);
 
@@ -495,7 +532,7 @@
 						}
 						$.ajax({
 							type : "post",
-							url : "MM_proc.php",
+							url : "manageMatchMM_proc.php",
 							async : false,
 							data : {
 								user_membership_id : $('#modal_h_user_membership_id').val(),
@@ -503,9 +540,10 @@
 								membership_id : $('#modal_membership_id').val(),
 								membership_start : $('#modal_membership_start').val(),
 								membership_end : $('#modal_membership_end').val(),
-								membership_fee : $('#modal_membership_fee').val(),
+								// membership_fee : $('#modal_membership_fee').val(),
+                                membership_payment_method : $('#modal_membership_payment_method').val(),
 								membership_payment : $('#modal_membership_payment').val(),
-								membership_unpaid_amount : $('#modal_membership_unpaid_amount').val(),
+								// membership_unpaid_amount : $('#modal_membership_unpaid_amount').val(),
 								reservation_cnt : $('#modal_reservation_cnt').val(),
 								memo : $('#modal_memo').val(),
                                 flag: 'update'
@@ -531,7 +569,7 @@
 					$('#status-y-event').on('click', function() {
 						$.ajax({
 							type : "post",
-							url : "MM_proc.php",
+							url : "manageMatchMM_proc.php",
 							async : false,
 							data : {
 								user_membership_id : $('#modal_h_user_membership_id').val(),
@@ -559,7 +597,7 @@
 					$('#status-n-event').on('click', function() {
 						$.ajax({
 							type : "post",
-							url : "MM_proc.php",
+							url : "manageMatchMM_proc.php",
 							async : false,
 							data : {
 								user_membership_id : $('#modal_h_user_membership_id').val(),

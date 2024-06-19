@@ -326,14 +326,14 @@
                 $total_params[":class_id"] = $_POST["class_id"];
             }
             $startDate = $_POST['p_start'];
-            $endDate = $_POST['p_end'] < date('Y-m-d') ? $_POST['p_end'] : date('Y-m-d');
+            $endDate = $_POST['p_end'];
+            
 
             $sql = "SELECT  COUNT(CASE WHEN status_atdc = 'Y' THEN 1 END) AS cnt_at
                             , COUNT(CASE WHEN status_atdc = 'N' THEN 1 END) AS cnt_ab
                             , COUNT(CASE WHEN status_atdc = 'R' THEN 1 END) AS cnt_rv
                             , COUNT(*) AS cnt_total
                             , reservation_dt
-                            , CASE WHEN reservation_dt = CURDATE() THEN 'V' ELSE '' END AS is_current
                     FROM    bt_reservation br
                     WHERE   1 = 1
                     {$where}
@@ -348,10 +348,18 @@
                 $db->prepare($sql);
                 $db->bind_array($total_params);
                 $response = $db->single();
-                if ($response['cnt_total'] != 0) {
-                    $result[] = $response;
-                }
                 
+                if ($response['cnt_total'] == 0) {
+                    $response = [
+                        'reservation_dt' => $curDate,
+                        'cnt_at' => 0,
+                        'cnt_ab' => 0,
+                        'cnt_rv' => 0,
+                        'cnt_total' => 0,
+                    ];
+                }
+                $response['is_current'] = $curDate == date('Y-m-d') ? 'V' : '';
+                $result[] = $response;
             }
             echo json_encode($result);
             break;
