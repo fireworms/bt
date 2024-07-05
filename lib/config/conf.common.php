@@ -103,14 +103,28 @@
         return $response;
     }
 
-    function get_membership_list () {
+    function get_membership_list ($class_id = '') {
         global $db;
 
-        $sql = "SELECT  *
-                FROM    bt_membership
-                WHERE   status = 'Y'
-        ";
+        if ($class_id) {
+            $sql = "SELECT  *
+                    FROM    bt_membership bm
+                    left join bt_match_cm cm on cm.membership_id = bm.membership_id
+                    WHERE   cm.status = 'Y'
+                    AND     cm.class_id = :class_id
+            ";
+        }
+        else {
+            $sql = "SELECT  *
+                    FROM    bt_membership
+                    WHERE   status = 'Y'
+            ";
+        }
+        
         $db->prepare($sql);
+        if ($class_id) { 
+            $db->bind(':class_id', $class_id);
+        }
         $res = $db->resultset();
         $response = [
             "data" => $res,

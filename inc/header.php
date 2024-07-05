@@ -32,6 +32,14 @@
         ';
     }
 
+    $membershipOptionData_t = get_membership_list('a1');
+    $membershipOption_t = '';
+    foreach($membershipOptionData_t['data'] as $val) {
+        $membershipOption_t .= '
+            <option value="'.$val['membership_id'].'" data-reservation_base_cnt="'.$val['reservation_base_cnt'].'" data-reservation_base_deadline="'.$val['reservation_base_deadline'].'">'.$val['membership_name'].'</option>
+        ';
+    }
+
     $paymentMethodOption = '';
     foreach($arrPaymentMethod as $key => $val) {
         $paymentMethodOption .= '
