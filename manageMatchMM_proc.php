@@ -21,11 +21,15 @@
                 $where .= " AND mm.status = :status";
                 $total_params[":status"] = $_POST["status"];
             }
+            if (isset($_POST["user_membership_id"]) && $_POST["user_membership_id"]) {
+                $where .= " AND mm.user_membership_id = :user_membership_id";
+                $total_params[":user_membership_id"] = $_POST["user_membership_id"];
+            }
             $sql = "SELECT  mm.*
                             , bm2.membership_name
                             , bm.user_name
                             -- , CONCAT(CONCAT(bc.class_name, ' / '), bm.membership_name) as class_membership_name
-                            , ROW_NUMBER() OVER (ORDER BY mm.user_id asc) AS rn
+                            , ROW_NUMBER() OVER (ORDER BY mm.user_membership_id desc) AS rn
                             , case
                                 when mm.status = 'Y' then '활성'
                                 when mm.status = 'N' then '비활성'
@@ -35,7 +39,7 @@
                     LEFT JOIN bt_membership bm2 ON bm2.membership_id = mm.membership_id
                     WHERE   1 = 1
                     {$where}
-                    order by mm.user_id asc
+                    order by mm.user_membership_id desc
             ";
             $db->prepare($sql);
             $db->bind_array($total_params);
@@ -48,6 +52,7 @@
 
         case "insert":
             $user_id                    = $_POST['user_id'];
+            $class_id                   = $_POST['class_id'];
             $membership_id              = $_POST['membership_id'];
             $membership_start           = $_POST['membership_start'];
             $membership_end             = $_POST['membership_end'];
@@ -61,6 +66,7 @@
             
             $sql = "INSERT  bt_match_mm SET
                             user_id                     = :user_id,
+                            class_id                    = :class_id,
                             membership_id               = :membership_id,
                             membership_start            = :membership_start,
                             membership_end              = :membership_end,
@@ -75,6 +81,7 @@
             $db->prepare($sql);
             $total_params = [
                 ':user_id'                  => $user_id,
+                ':class_id'                 => $class_id,
                 ':membership_id'            => $membership_id,
                 ':membership_start'         => $membership_start,
                 ':membership_end'           => $membership_end,
@@ -105,6 +112,7 @@
         case "update":
             $user_membership_id         = $_POST['user_membership_id'];
             $user_id                    = $_POST['user_id'];
+            $class_id                   = $_POST['class_id'];
             $membership_id              = $_POST['membership_id'];
             $membership_start           = $_POST['membership_start'];
             $membership_end             = $_POST['membership_end'];
@@ -117,6 +125,7 @@
             
             $sql = "UPDATE  bt_match_mm SET
                             user_id                     = :user_id,
+                            class_id                    = :class_id,
                             membership_id               = :membership_id,
                             membership_start            = :membership_start,
                             membership_end              = :membership_end,
@@ -132,6 +141,7 @@
             $total_params = [
                 ':user_membership_id'       => $user_membership_id,
                 ':user_id'                  => $user_id,
+                ':class_id'                 => $class_id,
                 ':membership_id'            => $membership_id,
                 ':membership_start'         => $membership_start,
                 ':membership_end'           => $membership_end,

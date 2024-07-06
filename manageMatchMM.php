@@ -102,6 +102,17 @@
 											</select>
 										</div>
 									</div>
+                                    <div class="row">
+										<div class="col-xs-4">
+											<div class="form-control form-label">클래스</div>
+										</div>
+										<div class="col-xs-8">
+											<select class="form-control selectpicker" id="modal_class_id" data-live-search="true">
+												<option value="">= 선택 =</option>
+                                                <?php echo $classOption; ?>
+											</select>
+										</div>
+									</div>
 									<div class="row">
 										<div class="col-xs-4">
 											<div class="form-control form-label">회원권</div>
@@ -109,7 +120,7 @@
 										<div class="col-xs-8">
 											<select class="form-control selectpicker" id="modal_membership_id">
 												<option value="">= 선택 =</option>
-                                                <?php echo $membershipOption; ?>
+                                                <?php echo $membershipOption_t; ?>
 											</select>
 										</div>
 									</div>
@@ -375,7 +386,6 @@
 					}
 				},
 				pagingType : "full_numbers",
-// 				dom : 'Blfrtip',
 				dom : 'Blrtip',
 				buttons : [ {
 					text : '등록',
@@ -388,6 +398,7 @@
 						$('#modal_h_user_membership_id').val("");
 						
 						$('#modal_user_id').val("").change();
+                        $('#modal_class_id').val("").change();
 						$('#modal_membership_id').val("").change();
 						$('#modal_reservation_cnt').val("");
 						$('#modal_membership_start').val("");
@@ -409,6 +420,10 @@
 								alert("회원을 선택하세요.");
 								return false;
 							}
+                            if ($("#modal_class_id").val().trim() === "") {
+								alert("클래스를 선택하세요.");
+								return false;
+							}
 							if ($("#modal_membership_id").val().trim() === "") {
 								alert("회원권을 선택하세요.");
 								return false;
@@ -425,6 +440,7 @@
 								data : {
 									user_membership_id : $('#modal_h_user_membership_id').val(),
 									user_id : $('#modal_user_id').val(),
+                                    class_id : $('#modal_class_id').val(),
 									membership_id : $('#modal_membership_id').val(),
 									membership_start : $('#modal_membership_start').val(),
 									membership_end : $('#modal_membership_end').val(),
@@ -501,6 +517,7 @@
 					$('#modal_h_user_membership_id').val(d.user_membership_id);
 					
 					$('#modal_user_id').val(d.user_id).change();
+                    $('#modal_class_id').val(d.class_id).change();
 					$('#modal_membership_id').val(d.membership_id).change();
 					$('#modal_reservation_cnt').val(d.reservation_cnt);
 					$('#modal_membership_start').val(d.membership_start);
@@ -522,6 +539,10 @@
 							alert("회원을 선택하세요.");
 							return false;
 						}
+                        if ($("#modal_class_id").val().trim() === "") {
+							alert("클래스를 선택하세요.");
+							return false;
+						}
 						if ($("#modal_membership_id").val().trim() === "") {
 							alert("회원권을 선택하세요.");
 							return false;
@@ -537,6 +558,7 @@
 							data : {
 								user_membership_id : $('#modal_h_user_membership_id').val(),
 								user_id : $('#modal_user_id').val(),
+                                class_id : $('#modal_class_id').val(),
 								membership_id : $('#modal_membership_id').val(),
 								membership_start : $('#modal_membership_start').val(),
 								membership_end : $('#modal_membership_end').val(),
