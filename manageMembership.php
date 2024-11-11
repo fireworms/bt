@@ -1,13 +1,13 @@
 <?php
+    $page_title = "회원권 관리";
     include_once("{$_SERVER['DOCUMENT_ROOT']}/inc/header.php");
 ?>
                 
 				<!-- End of Topbar -->
 				<div class="container">
-					<!-- 					<h1 class="h3">예약</h1> -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">회원권 관리</h3>
+							<h3 class="panel-title"><?php echo $page_title; ?></h3>
 						</div>
 						<div class="panel-body">
 							<div class="row">

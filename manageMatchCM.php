@@ -1,10 +1,11 @@
 <?php
+    $page_title = "클래스/회원권 매핑";
     include_once("{$_SERVER['DOCUMENT_ROOT']}/inc/header.php");
 ?>
                 <div class="container">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">클래스/회원권 매핑</h3>
+							<h3 class="panel-title"><?php echo $page_title; ?></h3>
 						</div>
 						<div class="panel-body">
 							<div class="row">

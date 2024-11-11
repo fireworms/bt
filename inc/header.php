@@ -52,7 +52,7 @@
 <!DOCTYPE html>
 <html lang="ko" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
 <head>
-	<title>출결 관리</title>
+	<title><?php echo $page_title; ?></title>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!--   <meta http-equiv="X-Frame-Options" content="SAMEORIGIN"> -->
@@ -224,6 +224,15 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">통계<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="/viewStatisticsMember.php">회원별 통계</a>
+                                            <a href="/viewStatisticsClass.php">클래스별 통계</a>
+                                        </li>
+                                    </ul>
+                                </li>
                                 
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
@@ -373,5 +382,7 @@
                             complete : function() { }
                         });
                     }
+
+                    
 
                 </script>

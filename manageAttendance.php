@@ -1,11 +1,12 @@
 <?php
+    $page_title = "출결 관리";
     include_once("{$_SERVER['DOCUMENT_ROOT']}/inc/header.php");
 ?>
 
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">출결 관리</h3>
+            <h3 class="panel-title"><?php echo $page_title; ?></h3>
         </div>
         <div class="panel-body">
             <div class="row">
