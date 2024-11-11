@@ -29,9 +29,9 @@
                                         <div class="text-center">
                                             <h1 class="h3 text-gray-900 mb-4">출력할 것들</h1>
                                         </div>
-                                        <a download="7223490727230_27857333_G.pdf" class="btn btn-primary btn-user btn-block" >내항공권</a>
-                                        <a download="ITR 문서 (한).pdf" class="btn btn-primary btn-user btn-block" >친구항공권</a>
-                                        <a download="폐업사실증명.pdf" class="btn btn-primary btn-user btn-block" >폐업신고서</a>
+                                        <a href="./kang.pdf" class="btn btn-primary btn-user btn-block" >내항공권</a>
+                                        <a href="./chang.pdf" class="btn btn-primary btn-user btn-block" >친구항공권</a>
+                                        <a href="./폐업사실증명.pdf" class="btn btn-primary btn-user btn-block" >폐업신고서</a>
                                     </div>
                                 </div>
                             </div>
